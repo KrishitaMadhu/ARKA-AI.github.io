@@ -1,0 +1,1293 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#102b35">
+<title>ARKA AI | Smart Heat Safety</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+:root {
+  --navy:#102b35;
+  --navy2:#193c46;
+  --green:#b9f36a;
+  --orange:#ff9b55;
+  --red:#ef6461;
+  --blue:#67c8e8;
+  --bg:#f3f6f4;
+  --white:#fff;
+  --text:#18343c;
+  --muted:#71838a;
+  --border:#e6ece9;
+  --shadow:0 8px 28px rgba(20,52,59,.055);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+button,input,select{font:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #67c8e8;outline-offset:2px}
+.app{display:flex;min-height:100vh}
+.sidebar{width:248px;background:var(--navy);color:white;padding:27px 17px;display:flex;flex-direction:column;flex-shrink:0}
+.brand{display:flex;align-items:center;gap:11px;padding:0 10px 29px}
+.brand-icon{width:43px;height:43px;border-radius:14px;background:var(--green);color:var(--navy);display:grid;place-items:center;font-size:22px}
+.brand h1{font-size:20px;letter-spacing:-.8px}
+.brand small{display:block;color:#b5c8ca;font-size:10px;margin-top:4px}
+.nav-label{color:#91a9ae;font-size:10px;letter-spacing:1.5px;font-weight:700;padding:13px 12px}
+.nav-btn{width:100%;display:flex;align-items:center;gap:12px;border:0;background:transparent;color:#c2d2d4;text-align:left;padding:12px;border-radius:10px;margin-bottom:4px;font-size:12px;transition:.2s}
+.nav-btn i{width:18px;font-size:15px}
+.nav-btn:hover,.nav-btn.active{background:#284952;color:var(--green)}
+.sidebar-bottom{margin-top:auto}
+.safety-note{background:#1b3a44;border:1px solid #31515a;padding:15px;border-radius:13px;line-height:1.6;color:#c6d5d6;font-size:11px}
+.safety-note i{color:var(--green);margin-right:5px}
+.main{flex:1;min-width:0}
+.topbar{height:79px;padding:0 34px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:15px}
+.top-left{display:flex;align-items:center;gap:12px}
+.top-left h2{font-size:16px}
+.top-left p{color:var(--muted);font-size:11px;margin-top:5px}
+.top-right{display:flex;align-items:center;gap:10px}
+.location-chip,.language-select{background:#f5f8f6;border:1px solid var(--border);border-radius:9px;padding:10px;font-size:11px;color:var(--text)}
+.language-select{max-width:165px}
+.avatar{height:36px;width:36px;border-radius:50%;background:#e2f5d0;display:grid;place-items:center;font-weight:800;color:#31532c}
+.mobile-menu{display:none;background:transparent;border:0;font-size:20px;color:var(--navy)}
+.content{padding:29px 34px 45px;max-width:1600px;margin:auto}
+.page{display:none}
+.page.active{display:block}
+.eyebrow{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:800;color:#73878b}
+.welcome{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:23px}
+.welcome h2{font-size:27px;letter-spacing:-1.1px;margin-top:8px}
+.welcome p{color:var(--muted);margin-top:7px;font-size:12px;line-height:1.6}
+.primary-btn,.secondary-btn,.danger-btn{border:0;border-radius:10px;padding:12px 16px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:.2s}
+.primary-btn{background:var(--navy);color:white}
+.primary-btn:hover{background:#28505b;transform:translateY(-1px)}
+.secondary-btn{background:#edf3ef;color:var(--navy);border:1px solid var(--border)}
+.danger-btn{background:#fff0ed;color:#b83c35}
+.full{width:100%}
+.alert-banner{background:#fff0e7;border:1px solid #ffdac4;border-radius:14px;padding:17px 20px;display:flex;align-items:center;gap:14px;margin-bottom:21px}
+.alert-icon{width:43px;height:43px;border-radius:12px;background:#ffdbbf;color:#b94b23;display:grid;place-items:center;font-size:19px;flex-shrink:0}
+.alert-banner strong{display:block;color:#9d4223;font-size:12px;margin-bottom:5px}
+.alert-banner p{font-size:11px;color:#8d5944;line-height:1.7}
+.alert-tag{margin-left:auto;background:white;color:#b94b23;border-radius:7px;padding:8px 10px;font-size:10px;font-weight:800;white-space:nowrap}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:19px}
+.stat-card,.card{background:white;border:1px solid var(--border);border-radius:15px;box-shadow:var(--shadow)}
+.stat-card{padding:18px}
+.stat-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.stat-label{font-size:11px;color:var(--muted);font-weight:600}
+.stat-icon{width:32px;height:32px;border-radius:10px;display:grid;place-items:center}
+.icon-orange{background:#fff0e5;color:#d66d2f}
+.icon-blue{background:#e7f7fb;color:#2286a4}
+.icon-green{background:#eaf8dd;color:#4d8625}
+.icon-red{background:#ffeded;color:#cb514e}
+.stat-value{font-size:28px;font-weight:800;letter-spacing:-1px;margin:15px 0 5px}
+.stat-foot{font-size:10px;color:var(--muted)}
+.stat-foot strong{color:#40834c}
+.dashboard-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,1fr);gap:18px;margin-bottom:19px}
+.card{padding:21px;min-width:0}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
+.card-head h3{font-size:14px;letter-spacing:-.3px}
+.card-head p{font-size:10px;color:var(--muted);margin-top:5px;line-height:1.5}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:7px 9px;border-radius:7px;background:#eef6e8;color:#4b7c31;font-size:10px;font-weight:700}
+.risk-layout{display:flex;align-items:center;gap:25px}
+.gauge{width:156px;height:156px;position:relative;flex-shrink:0;display:grid;place-items:center}
+.gauge svg{width:100%;height:100%;transform:rotate(-90deg)}
+.gauge circle{fill:none;stroke-width:12}
+.gauge .track{stroke:#edf1ee}
+.gauge .progress{stroke:var(--orange);stroke-linecap:round;stroke-dasharray:408.4;stroke-dashoffset:163.4;transition:stroke-dashoffset .6s}
+.gauge-center{position:absolute;text-align:center}
+.gauge-number{font-size:43px;letter-spacing:-2px;font-weight:800}
+.gauge-caption{font-size:10px;color:var(--muted);margin-top:2px}
+.risk-info{flex:1;min-width:0}
+.risk-info h4{font-size:16px;margin-bottom:8px}
+.risk-info p{font-size:11px;color:var(--muted);line-height:1.8}
+.factor{margin-top:15px}
+.factor-head{display:flex;justify-content:space-between;font-size:10px;margin-bottom:7px}
+.factor-head span:last-child{color:var(--muted)}
+.factor-bar{height:6px;background:#edf1ee;border-radius:9px;overflow:hidden}
+.factor-bar span{height:100%;display:block;background:var(--orange);border-radius:9px;transition:width .4s}
+.confidence{margin-top:18px;padding-top:14px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:10px;color:var(--muted)}
+.chart-wrap{height:205px;position:relative}
+canvas{width:100%;height:100%;display:block}
+.chart-legend{display:flex;gap:15px;flex-wrap:wrap;margin-top:14px;font-size:10px;color:var(--muted)}
+.legend-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}
+.chart-note{font-size:10px;color:var(--muted);line-height:1.6;margin-top:12px}
+.lower-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);gap:18px}
+.recommendation{display:flex;align-items:flex-start;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)}
+.recommendation:last-child{border:0;padding-bottom:0}
+.rec-icon{width:35px;height:35px;display:grid;place-items:center;border-radius:10px;flex-shrink:0}
+.recommendation h4{font-size:11px;margin:2px 0 5px}
+.recommendation p{font-size:10px;color:var(--muted);line-height:1.7}
+.schedule-item{display:grid;grid-template-columns:93px 12px minmax(0,1fr);gap:11px;padding:12px 0;border-bottom:1px solid var(--border)}
+.schedule-item:last-child{border:0}
+.schedule-time{font-size:10px;font-weight:700;padding-top:3px;line-height:1.5}
+.timeline-dot{width:10px;height:10px;border-radius:50%;margin-top:4px}
+.schedule-item h4{font-size:11px;margin-bottom:5px}
+.schedule-item p{font-size:10px;color:var(--muted);line-height:1.6}
+.risk-label{display:inline-block;font-size:9px;font-weight:800;margin-top:6px;padding:5px 7px;border-radius:5px}
+.low{background:#eaf7df;color:#46772b}
+.moderate{background:#fff4cf;color:#8c6908}
+.high{background:#ffe8d6;color:#a84e16}
+.very-high{background:#ffdfdf;color:#b02c2c}
+.section-title{font-size:21px;letter-spacing:-.7px;margin:7px 0}
+.section-desc{font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:22px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}
+.field label{display:block;font-size:11px;font-weight:700;margin-bottom:8px}
+.field input,.field select{width:100%;padding:12px;border:1px solid #dfe8e2;border-radius:9px;background:white;color:var(--text);font-size:12px}
+.field small{display:block;font-size:10px;color:var(--muted);margin-top:6px;line-height:1.5}
+.form-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.result-area{margin-top:20px}
+.empty-state{text-align:center;padding:34px 15px;color:var(--muted);font-size:12px;line-height:1.8}
+.empty-state i{font-size:26px;color:#9fb2ac;margin-bottom:12px}
+.table-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:11px}
+th,td{text-align:left;padding:13px 10px;border-bottom:1px solid var(--border);white-space:nowrap}
+th{color:var(--muted);font-weight:600;background:#f8faf8}
+.map-placeholder{background:linear-gradient(135deg,#e5f0e8,#d6e9e1);min-height:180px;border-radius:12px;display:grid;place-items:center;text-align:center;color:#44675b;padding:20px;line-height:1.8}
+.hospital-item{padding:15px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:12px}
+.hospital-item:last-child{border:0}
+.hospital-icon{width:39px;height:39px;background:#ffeded;color:#ce4f4c;border-radius:10px;display:grid;place-items:center;flex-shrink:0}
+.hospital-item h4{font-size:12px;margin-bottom:6px}
+.hospital-item p{font-size:10px;color:var(--muted);line-height:1.7}
+.hospital-item a{display:inline-block;margin-top:7px;color:#287b91;text-decoration:none;font-size:10px;font-weight:700}
+.chat-launcher{position:fixed;right:24px;bottom:24px;width:58px;height:58px;border:0;border-radius:19px;background:var(--navy);color:var(--green);box-shadow:0 8px 30px #102b3540;font-size:22px;z-index:50}
+.chat-panel{display:none;position:fixed;right:24px;bottom:94px;width:min(380px,calc(100vw - 30px));height:510px;max-height:70vh;background:white;border:1px solid var(--border);border-radius:18px;box-shadow:0 15px 60px #102b3530;z-index:50;overflow:hidden;flex-direction:column}
+.chat-panel.open{display:flex}
+.chat-header{background:var(--navy);color:white;padding:17px;display:flex;align-items:center;gap:10px}
+.chat-logo{width:36px;height:36px;border-radius:11px;background:var(--green);color:var(--navy);display:grid;place-items:center}
+.chat-header h3{font-size:12px}
+.chat-header p{font-size:10px;color:#b9d0d1;margin-top:4px}
+.chat-close{margin-left:auto;background:transparent;border:0;color:white;font-size:18px}
+.chat-messages{flex:1;overflow:auto;padding:15px;background:#f7faf8}
+.message{max-width:90%;padding:11px 12px;border-radius:12px;margin-bottom:10px;font-size:11px;line-height:1.75;white-space:pre-wrap}
+.message.bot{background:white;border:1px solid var(--border);border-top-left-radius:3px}
+.message.user{background:#dff3c9;margin-left:auto;border-top-right-radius:3px}
+.suggestions{display:flex;gap:6px;flex-wrap:wrap;padding:8px 12px}
+.suggestion{border:1px solid #dce8df;background:white;color:#31524a;border-radius:20px;padding:7px 9px;font-size:9px}
+.chat-input{padding:12px;border-top:1px solid var(--border);display:flex;gap:8px}
+.chat-input input{flex:1;min-width:0;border:1px solid var(--border);border-radius:9px;padding:11px;font-size:11px}
+.chat-input button{width:42px;border:0;border-radius:9px;background:var(--navy);color:white}
+.toast{position:fixed;bottom:25px;left:50%;transform:translate(-50%,20px);background:var(--navy);color:white;padding:12px 18px;border-radius:10px;font-size:11px;opacity:0;pointer-events:none;transition:.25s;z-index:100;max-width:90vw}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+footer{text-align:center;padding:24px 10px;color:var(--muted);font-size:10px;line-height:1.8}
+footer strong{color:var(--text)}
+@media(max-width:1100px){
+ .sidebar{width:215px}
+ .content{padding:24px 20px}
+ .topbar{padding:0 20px}
+ .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .dashboard-grid,.lower-grid{grid-template-columns:1fr}
+}
+@media(max-width:720px){
+ .sidebar{position:fixed;top:0;bottom:0;left:-260px;width:248px;z-index:80;transition:left .25s;box-shadow:10px 0 40px #102b3520}
+ .sidebar.open{left:0}
+ .mobile-menu{display:block}
+ .topbar{height:68px;padding:0 15px}
+ .top-left h2{font-size:14px}
+ .top-left p{font-size:10px}
+ .location-chip{display:none}
+ .language-select{max-width:115px;padding:9px 5px;font-size:10px}
+ .top-right{gap:7px}
+ .avatar{display:none}
+ .content{padding:21px 13px 35px}
+ .welcome{align-items:flex-start;flex-direction:column}
+ .welcome h2{font-size:24px}
+ .welcome .primary-btn{width:100%}
+ .alert-banner{padding:13px;align-items:flex-start}
+ .alert-tag{display:none}
+ .stats{gap:9px}
+ .stat-card{padding:13px}
+ .stat-value{font-size:24px}
+ .stat-label{font-size:10px}
+ .card{padding:16px}
+ .risk-layout{gap:12px}
+ .gauge{width:125px;height:125px}
+ .gauge-number{font-size:34px}
+ .risk-info h4{font-size:13px}
+ .risk-info p{font-size:10px}
+ .form-grid{grid-template-columns:1fr}
+ .schedule-item{grid-template-columns:78px 10px minmax(0,1fr);gap:8px}
+ .chat-launcher{right:14px;bottom:14px;width:53px;height:53px}
+ .chat-panel{right:10px;bottom:77px}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <img src="arka-sticker.png" alt="ARKA Logo" class="brand-sticker">
+</div>
+      <div class="brand-text">
+    <h2>ARKA AI</h2>
+    <p><small>The Sun Warns.<p> ARKA Guides.</p></small></p>
+</div>
+
+
+    <div class="nav-label">WORKSPACE</div>
+    <button class="nav-btn active" data-page="dashboard"><i class="fa-solid fa-grip"></i><span data-i18n="navDashboard">Dashboard</span></button>
+    <button class="nav-btn" data-page="forecast"><i class="fa-solid fa-temperature-three-quarters"></i><span data-i18n="navForecast">Heat Forecast</span></button>
+    <button class="nav-btn" data-page="scheduler"><i class="fa-solid fa-calendar-check"></i><span data-i18n="navScheduler">Smart Scheduler</span></button>
+    <button class="nav-btn" data-page="safety"><i class="fa-solid fa-droplet"></i><span data-i18n="navSafety">Worker Safety</span></button>
+
+    <div class="nav-label">FIELD OPERATIONS</div>
+    <button class="nav-btn" data-page="hospitals"><i class="fa-solid fa-hospital"></i><span data-i18n="navHospitals">Nearby Hospitals</span></button>
+    <button class="nav-btn" data-page="supervisor"><i class="fa-solid fa-people-group"></i><span data-i18n="navSupervisor">Supervisor View</span></button>
+    <button class="nav-btn" data-page="settings"><i class="fa-solid fa-sliders"></i><span data-i18n="navSettings">Settings & Location</span></button>
+
+    <div class="sidebar-bottom">
+      <div class="safety-note"><i class="fa-solid fa-circle-info"></i><strong>Safety first</strong><br>Forecasts support decisions; they do not replace workplace safety rules or on-site assessment.</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="top-left">
+        <button class="mobile-menu" id="menuToggle" aria-label="Open navigation"><i class="fa-solid fa-bars"></i></button>
+        <div><h2 id="pageTitle">Heat Safety Dashboard</h2><p id="dateText">Your daily heat-safety overview</p></div>
+      </div>
+      <div class="top-right">
+        <div class="location-chip"><i class="fa-solid fa-location-dot"></i> <span id="topLocation">Ahmedabad, Gujarat</span></div>
+        <select class="language-select" id="languageSelect" aria-label="Choose language">
+          <option value="en">🇮🇳 English</option>
+          <option value="hi">🇮🇳 हिन्दी</option>
+          <option value="gu">🇮🇳 ગુજરાતી</option>
+          <option value="mr">🇮🇳 मराठी</option>
+          <option value="bn">🇮🇳 বাংলা</option>
+          <option value="ta">🇮🇳 தமிழ்</option>
+          <option value="te">🇮🇳 తెలుగు</option>
+          <option value="kn">🇮🇳 ಕನ್ನಡ</option>
+          <option value="ml">🇮🇳 മലയാളം</option>
+          <option value="pa">🇮🇳 ਪੰਜਾਬੀ</option>
+          <option value="or">🇮🇳 ଓଡ଼ିଆ</option>
+          <option value="as">🇮🇳 অসমীয়া</option>
+          <option value="ur">🇮🇳 اردو</option>
+          <option value="kok">Konkani</option>
+          <option value="ks">Kashmiri</option>
+          <option value="mni">Manipuri / Meitei</option>
+          <option value="ne">Nepali</option>
+          <option value="brx">Bodo</option>
+          <option value="doi">Dogri</option>
+          <option value="mai">Maithili</option>
+          <option value="sat">Santali</option>
+          <option value="sa">संस्कृतम्</option>
+        </select>
+        <div class="avatar">HS</div>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- DASHBOARD -->
+
+      <section class="page active" id="page-dashboard">
+        <div class="welcome">
+          <div>
+            <div class="eyebrow" data-i18n="overview">YOUR DAILY OVERVIEW</div>
+            <h2 data-i18n="greeting">Work smarter. Stay safer. ☀️</h2>
+            <p>Monitor local heat conditions and turn forecasts into practical work decisions.</p>
+          </div>
+          <button class="primary-btn" onclick="showPage('scheduler')"><i class="fa-solid fa-wand-magic-sparkles"></i><span data-i18n="generate">Generate Safe Schedule</span></button>
+        </div>
+
+        <div class="alert-banner">
+          <div class="alert-icon"><i class="fa-solid fa-sun"></i></div>
+          <div>
+            <strong id="alertTitle">HEAT ADVISORY · DEMO FORECAST</strong>
+            <p id="alertText">Afternoon heat may increase exposure. Check the hourly forecast, schedule recovery breaks, and follow workplace safety rules.</p>
+          </div>
+          <span class="alert-tag" id="alertTag">TAKE CARE</span>
+        </div>
+
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-top"><span class="stat-label" data-i18n="temperature">Temperature</span><span class="stat-icon icon-orange"><i class="fa-solid fa-temperature-high"></i></span></div>
+            <div class="stat-value" id="tempStat">34°C</div><div class="stat-foot" id="tempFoot">Demo forecast</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-top"><span class="stat-label" data-i18n="feelsLike">Feels like</span><span class="stat-icon icon-blue"><i class="fa-solid fa-wind"></i></span></div>
+            <div class="stat-value" id="feelsStat">38°C</div><div class="stat-foot">Estimated apparent temperature</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-top"><span class="stat-label" data-i18n="humidity">Humidity</span><span class="stat-icon icon-blue"><i class="fa-solid fa-droplet"></i></span></div>
+            <div class="stat-value" id="humidityStat">55%</div><div class="stat-foot">Relative humidity</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-top"><span class="stat-label" data-i18n="maxTemp">Forecast maximum</span><span class="stat-icon icon-red"><i class="fa-solid fa-sun"></i></span></div>
+            <div class="stat-value" id="maxStat">39°C</div><div class="stat-foot" id="forecastFoot">Daily forecast</div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="card">
+            <div class="card-head"><div><h3 data-i18n="riskScore">Personalized Heat-Risk Score</h3><p>Illustrative decision-support score, not a medical measurement</p></div><span class="pill" id="riskPill">● Estimated</span></div>
+            <div class="risk-layout">
+              <div class="gauge">
+                <svg viewBox="0 0 150 150" aria-label="Heat risk gauge">
+                  <circle class="track" cx="75" cy="75" r="65"></circle>
+                  <circle class="progress" id="gaugeProgress" cx="75" cy="75" r="65"></circle>
+                </svg>
+                <div class="gauge-center"><div class="gauge-number" id="riskNumber">68</div><div class="gauge-caption">OUT OF 100</div></div>
+              </div>
+              <div class="risk-info">
+                <h4 id="riskCategory">High estimated risk</h4>
+                <p id="riskDescription">Heat exposure may be significant. Reassess working conditions and consider moving heavy outdoor tasks to cooler periods.</p>
+                <div class="factor">
+                  <div class="factor-head"><span>Temperature contribution</span><span id="tempFactorText">High</span></div>
+                  <div class="factor-bar"><span id="tempFactorBar" style="width:78%"></span></div>
+                </div>
+                <div class="factor">
+                  <div class="factor-head"><span>Work intensity</span><span id="intensityText">High</span></div>
+                  <div class="factor-bar"><span id="intensityBar" style="width:85%;background:#e9b948"></span></div>
+                </div>
+              </div>
+            </div>
+            <div class="confidence"><span><i class="fa-solid fa-circle-info"></i> <span id="sourceLabel">Demo data · simulated resolution</span></span><span id="confidenceLabel">Confidence: not calibrated</span></div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><div><h3 data-i18n="hourly">Hourly Heat Timeline</h3><p>Risk estimates across the day</p></div><select id="chartMode" class="language-select" aria-label="Chart metric"><option value="risk">Heat risk</option><option value="temp">Temperature</option><option value="humidity">Humidity</option></select></div>
+            <div class="chart-wrap"><canvas id="heatChart" aria-label="Hourly forecast chart"></canvas></div>
+            <div class="chart-legend"><span><i class="legend-dot" style="background:#f0a052"></i>Estimated values</span><span><i class="legend-dot" style="background:#dce8df"></i>Lower relative risk</span></div>
+            <p class="chart-note" id="chartNote">Demo data. Live forecasts require a successful weather API response.</p>
+          </div>
+        </div>
+
+        <div class="lower-grid">
+          <div class="card">
+            <div class="card-head"><div><h3 data-i18n="recommendations">Today's Safety Actions</h3><p>Practical steps based on the current risk estimate</p></div></div>
+            <div id="recommendationList"></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><div><h3 data-i18n="schedulePreview">Recommended Schedule</h3><p id="previewDate">Illustrative schedule · reassess conditions</p></div><button class="secondary-btn" onclick="showPage('scheduler')">View all <i class="fa-solid fa-arrow-right"></i></button></div>
+            <div id="previewSchedule"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FORECAST -->
+      <section class="page" id="page-forecast">
+        <div class="eyebrow">WEATHER INTELLIGENCE</div>
+        <h2 class="section-title" data-i18n="navForecast">Heat Forecast</h2>
+        <p class="section-desc">Review hourly weather and heat-risk estimates. Forecast resolution and source are shown explicitly.</p>
+        <div class="card">
+          <div class="card-head"><div><h3>Hourly Forecast</h3><p id="forecastLocation">Ahmedabad, Gujarat · Demo data</p></div><button class="secondary-btn" onclick="loadWeather()"> <i class="fa-solid fa-rotate"></i> Refresh forecast</button></div>
+          <div class="chart-wrap" style="height:270px"><canvas id="forecastChart"></canvas></div>
+          <div class="table-wrap" style="margin-top:20px">
+            <table><thead><tr><th>Time</th><th>Temp.</th><th>Feels like</th><th>Humidity</th><th>Wind</th><th>Estimated risk</th></tr></thead><tbody id="forecastTable"></tbody></table>
+          </div>
+          <p class="chart-note" id="forecastDisclaimer">Demo values are simulated. The risk score is an illustrative heuristic and is not a validated occupational WBGT calculation.</p>
+        </div>
+      </section>
+
+      <!-- SCHEDULER -->
+      <section class="page" id="page-scheduler">
+        <div class="eyebrow">YOUR SMART WORK PLANNER</div>
+        <h2 class="section-title" data-i18n="navScheduler">Smart Outdoor Work Scheduler</h2>
+        <p class="section-desc">Create a personalized plan based on location, job intensity, shift hours, and the available forecast. Generated windows are recommendations, not guarantees of safety.</p>
+        <div class="card">
+          <div class="card-head"><div><h3>Configure your workday</h3><p>Choose your job profile and scheduling preferences.</p></div><span class="pill"><i class="fa-solid fa-wand-magic-sparkles"></i> Smart planner</span></div>
+          <div class="form-grid">
+            <div class="field"><label for="workLocation">Worksite / city</label><input id="workLocation" value="Bopal, Ahmedabad, Gujarat" placeholder="Enter worksite or city"><small>Use a specific locality for better location matching.</small></div>
+            <div class="field"><label for="jobType">Job category</label><select id="jobType">
+              <option value="construction">Construction worker</option><option value="road">Road maintenance</option><option value="delivery">Delivery personnel</option><option value="vendor">Street vendor</option><option value="agriculture">Agricultural worker</option><option value="sanitation">Sanitation worker</option><option value="security">Traffic police / outdoor security</option><option value="technician">Field technician</option><option value="student">College student / outdoor activity</option><option value="general">General outdoor worker</option>
+            </select></div>
+            <div class="field"><label for="intensity">Work intensity</label><select id="intensity"><option value="light">Light — mostly stationary</option><option value="moderate">Moderate — regular movement</option><option value="high" selected>High — physically demanding</option></select></div>
+            <div class="field"><label for="workerType">Worker profile</label><select id="workerType"><option>Employee</option><option>Independent worker</option><option>Student</option><option>Supervisor</option></select></div>
+            <div class="field"><label for="shiftStart">Shift starts</label><input id="shiftStart" type="time" value="05:30"></div>
+            <div class="field"><label for="shiftEnd">Shift ends</label><input id="shiftEnd" type="time" value="18:30"></div>
+            <div class="field"><label for="workDate">Work date</label><input id="workDate" type="date"></div>
+            <div class="field"><label for="shade">Shade / cooling access</label><select id="shade"><option value="yes">Regular shade or cooling available</option><option value="partial" selected>Limited shade available</option><option value="no">No reliable shade available</option></select></div>
+            <div class="field"><label for="duration">Outdoor work duration</label><select id="duration"><option value="2">About 2 hours</option><option value="4">About 4 hours</option><option value="6" selected>About 6 hours</option><option value="8">About 8 hours</option></select></div>
+            <div class="field"><label for="breakFrequency">Preferred recovery break</label><select id="breakFrequency"><option value="30">Every 30 minutes</option><option value="45" selected>Every 45 minutes</option><option value="60">Every 60 minutes</option></select><small>Actual rest frequency must follow risk assessment and applicable safety rules.</small></div>
+          </div>
+          <div class="form-actions">
+            <button class="primary-btn" onclick="generateSchedule()"><i class="fa-solid fa-wand-magic-sparkles"></i> Generate Safe Work Schedule</button>
+            <button class="secondary-btn" onclick="downloadSchedule()"><i class="fa-solid fa-download"></i> Download schedule</button>
+            <button class="secondary-btn" onclick="shareSchedule()"><i class="fa-solid fa-share-nodes"></i> Share</button>
+          </div>
+          <div class="result-area" id="scheduleResults"><div class="empty-state"><i class="fa-solid fa-calendar-day"></i><br>Your personalized schedule will appear here.<br>Choose your work profile and select Generate.</div></div>
+        </div>
+      </section>
+
+      <!-- SAFETY -->
+      <section class="page" id="page-safety">
+        <div class="eyebrow">WORKER WELLNESS</div>
+        <h2 class="section-title" data-i18n="navSafety">Worker Safety</h2>
+        <p class="section-desc">Simple reminders to reduce heat exposure and respond quickly to warning symptoms.</p>
+        <div class="dashboard-grid">
+          <div class="card"><div class="card-head"><div><h3>Hydration Tracker</h3><p>Log drinks during your shift. This is a tracking tool, not a prescribed fluid target.</p></div><span class="stat-icon icon-blue"><i class="fa-solid fa-droplet"></i></span></div>
+            <div style="font-size:32px;font-weight:800;margin:18px 0 7px" id="waterCount">0 <span style="font-size:14px;color:var(--muted)">drinks logged</span></div>
+            <div class="factor-bar"><span id="waterBar" style="width:0%;background:#55bde0"></span></div>
+            <p class="chart-note">Follow your workplace hydration guidance and individual medical advice.</p>
+            <div class="form-actions"><button class="primary-btn" onclick="addWater()"><i class="fa-solid fa-plus"></i> Log a drink</button><button class="secondary-btn" onclick="resetWater()">Reset today</button></div>
+          </div>
+          <div class="card"><div class="card-head"><div><h3>Break Reminders</h3><p>Use a reminder to reassess exposure and cool down.</p></div><span class="stat-icon icon-green"><i class="fa-solid fa-clock"></i></span></div>
+            <div class="recommendation"><div class="rec-icon icon-green"><i class="fa-solid fa-tree"></i></div><div><h4>Move to shade or a cool area</h4><p>Take recovery breaks appropriate to the current conditions and work intensity.</p></div></div>
+            <div class="recommendation"><div class="rec-icon icon-blue"><i class="fa-solid fa-bell"></i></div><div><h4>Set a reminder</h4><p>Browser reminders require your permission and work only while the page or supported session is active.</p></div></div>
+            <button class="primary-btn full" style="margin-top:17px" onclick="enableReminders()"><i class="fa-solid fa-bell"></i> Enable browser reminders</button>
+          </div>
+        </div>
+        <div class="card" style="margin-top:18px;border-left:4px solid var(--red)">
+          <div class="card-head"><div><h3 style="color:#b83b38"><i class="fa-solid fa-triangle-exclamation"></i> Recognize a heat emergency</h3><p>Do not wait for a forecast or chatbot if someone appears seriously ill.</p></div></div>
+          <p style="font-size:12px;line-height:1.9;color:#53686b">Stop work and seek emergency medical help for suspected heatstroke, confusion, collapse, seizures, or altered consciousness. Move the person to a cooler area and begin rapid cooling while help is on the way. Do not give fluids to someone who is confused or unconscious. In India, call <strong>112</strong> for emergency assistance.</p>
+          <button class="danger-btn" style="margin-top:15px" onclick="window.open('tel:112')"><i class="fa-solid fa-phone"></i> Call emergency services · 112</button>
+        </div>
+      </section>
+
+      <!-- HOSPITALS -->
+      <section class="page" id="page-hospitals">
+        <div class="eyebrow">LOCAL EMERGENCY CARE</div>
+        <h2 class="section-title" data-i18n="navHospitals">Nearby Hospitals</h2>
+        <p class="section-desc">Search for nearby healthcare facilities using OpenStreetMap data. Availability and emergency services must be verified with the facility.</p>
+        <div class="card">
+          <div class="form-grid">
+            <div class="field"><label for="hospitalLocation">Search near</label><input id="hospitalLocation" value="Ahmedabad, Gujarat" placeholder="Enter city or location"></div>
+            <div class="field"><label>Use your current location</label><button class="secondary-btn full" onclick="useGPS()"><i class="fa-solid fa-location-crosshairs"></i> Use GPS location</button></div>
+          </div>
+          <div class="form-actions"><button class="primary-btn" onclick="searchHospitals()"><i class="fa-solid fa-magnifying-glass"></i> Find nearby hospitals</button><a class="secondary-btn" id="mapLink" href="https://www.openstreetmap.org/" target="_blank" rel="noopener">Open map <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>
+          <div id="hospitalResults" style="margin-top:18px"><div class="empty-state"><i class="fa-solid fa-hospital"></i><br>Search to look for mapped hospitals near your location.</div></div>
+          <p class="chart-note">Results depend on OpenStreetMap coverage and network access. Phone numbers, emergency capabilities, operating hours, and distance may be unavailable or incomplete. Verify before relying on them.</p>
+        </div>
+      </section>
+
+      <!-- SUPERVISOR -->
+      <section class="page" id="page-supervisor">
+        <div class="eyebrow">FIELD OPERATIONS</div>
+        <h2 class="section-title" data-i18n="navSupervisor">Supervisor Dashboard</h2>
+        <p class="section-desc">A demonstration view for reviewing worksite risk and planning teams. Team counts below are sample data, not live worker monitoring.</p>
+        <div class="stats">
+          <div class="stat-card"><div class="stat-label">Sample team size</div><div class="stat-value">24</div><div class="stat-foot">Demo workforce</div></div>
+          <div class="stat-card"><div class="stat-label">Worksites</div><div class="stat-value">3</div><div class="stat-foot">Illustrative locations</div></div>
+          <div class="stat-card"><div class="stat-label">Needs review</div><div class="stat-value" id="reviewCount">2</div><div class="stat-foot">Example high-risk assignments</div></div>
+          <div class="stat-card"><div class="stat-label">Forecast source</div><div class="stat-value" style="font-size:18px" id="supervisorSource">Demo</div><div class="stat-foot">See source details</div></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div><h3>Worksite risk overview</h3><p>Sample team planning data · replace with authorized live records in production.</p></div><button class="secondary-btn" onclick="downloadSupervisorCSV()"><i class="fa-solid fa-download"></i> Export CSV</button></div>
+          <div class="table-wrap"><table><thead><tr><th>Worksite</th><th>Team</th><th>Risk status</th><th>Recommended action</th></tr></thead><tbody id="supervisorTable"></tbody></table></div>
+        </div>
+        <div class="card" style="margin-top:18px"><div class="card-head"><div><h3>Supervisor checklist</h3><p>Review before assigning exposed outdoor work.</p></div></div>
+          <div class="recommendation"><div class="rec-icon icon-orange"><i class="fa-solid fa-cloud-sun"></i></div><div><h4>Check the latest forecast</h4><p>Confirm the data timestamp and current local conditions.</p></div></div>
+          <div class="recommendation"><div class="rec-icon icon-blue"><i class="fa-solid fa-water"></i></div><div><h4>Confirm water and cooling access</h4><p>Verify drinking water, shaded recovery space, and an emergency response plan.</p></div></div>
+          <div class="recommendation"><div class="rec-icon icon-red"><i class="fa-solid fa-calendar-xmark"></i></div><div><h4>Review dangerous work periods</h4><p>Change or stop exposed work when required by applicable safety protocols.</p></div></div>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section class="page" id="page-settings">
+        <div class="eyebrow">PERSONALIZE YOUR EXPERIENCE</div>
+        <h2 class="section-title" data-i18n="navSettings">Settings & Location</h2>
+        <p class="section-desc">Select your worksite and preferred language. Language choices are not restricted by state.</p>
+        <div class="card">
+          <div class="card-head"><div><h3>Location preferences</h3><p>Choose a location for forecast and schedule calculations.</p></div></div>
+          <div class="form-grid">
+            <div class="field"><label for="stateSelect">State / territory</label><select id="stateSelect"><option>Gujarat</option><option>Maharashtra</option><option>Rajasthan</option><option>Tamil Nadu</option><option>Telangana</option><option>Karnataka</option><option>Kerala</option><option>West Bengal</option><option>Punjab</option><option>Odisha</option><option>Assam</option><option>Delhi</option><option>Uttar Pradesh</option><option>Madhya Pradesh</option><option>Bihar</option><option>Jharkhand</option><option>Chhattisgarh</option><option>Goa</option><option>Haryana</option><option>Himachal Pradesh</option><option>Uttarakhand</option><option>Andhra Pradesh</option><option>Arunachal Pradesh</option><option>Manipur</option><option>Meghalaya</option><option>Mizoram</option><option>Nagaland</option><option>Sikkim</option><option>Tripura</option><option>Jammu and Kashmir</option><option>Ladakh</option><option>Puducherry</option></select></div>
+            <div class="field"><label for="settingsLocation">City / locality / worksite</label><input id="settingsLocation" value="Bopal, Ahmedabad, Gujarat"></div>
+            <div class="field"><label for="settingsLanguage">Preferred language</label><select id="settingsLanguage"></select></div>
+            <div class="field"><label>Current location</label><button class="secondary-btn full" onclick="useGPS()"><i class="fa-solid fa-location-crosshairs"></i> Detect my location</button></div>
+          </div>
+          <div class="form-actions"><button class="primary-btn" onclick="saveSettings()"><i class="fa-solid fa-check"></i> Save preferences</button><button class="secondary-btn" onclick="loadWeather()">Refresh weather data</button></div>
+        </div>
+        <div class="card" style="margin-top:18px">
+          <div class="card-head"><div><h3>Data sources & limitations</h3><p>Understand where the dashboard information comes from.</p></div></div>
+          <div class="recommendation"><div class="rec-icon icon-blue"><i class="fa-solid fa-cloud"></i></div><div><h4>Weather forecast</h4><p id="weatherSourceDetails">The current prototype starts with simulated demonstration data. Refresh to attempt a live Open-Meteo forecast.</p></div></div>
+          <div class="recommendation"><div class="rec-icon icon-orange"><i class="fa-solid fa-gauge-high"></i></div><div><h4>Heat-risk estimate</h4><p>This prototype uses a simple heuristic combining temperature, humidity, work intensity, and shade access. It is not a validated WBGT or medical risk model.</p></div></div>
+          <div class="recommendation"><div class="rec-icon icon-green"><i class="fa-solid fa-language"></i></div><div><h4>Regional languages</h4><p>English, Hindi, Gujarati, Marathi, Bengali, Tamil, Telugu, and Kannada have interface dictionaries in this prototype. Other listed languages currently fall back to English until translations are added and reviewed.</p></div></div>
+        </div>
+      </section>
+
+      <footer><strong>ARKA AI</strong> · Work Smarter. Stay Cooler. Stay Safe.<br>Prototype for demonstration purposes. Follow official weather alerts, local occupational safety rules, and on-site assessment.</footer>
+    </div>
+  </main>
+</div>
+
+<!-- Floating AI assistant -->
+<button class="chat-launcher" id="chatLauncher" aria-label="Open ARKA Assistant"><i class="fa-solid fa-message"></i></button>
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-header">
+    <div class="chat-logo"><i class="fa-solid fa-shield-heart"></i></div>
+    <div><h3>ARKA Assistant</h3><p>Demo mode · Heat-safety guide</p></div>
+    <button class="chat-close" id="chatClose" aria-label="Close chatbot">×</button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="message bot">Hello! I can explain the displayed forecast, suggest schedule changes, and share general heat-safety guidance. I am currently running in demo mode, not connected to a live AI service.</div>
+  </div>
+  <div class="suggestions">
+    <button class="suggestion" onclick="askSuggestion('Explain today’s heat risk')">Explain today's risk</button>
+    <button class="suggestion" onclick="askSuggestion('Create a safe work schedule')">Plan my shift</button>
+    <button class="suggestion" onclick="askSuggestion('What if a worker feels dizzy?')">Heat illness help</button>
+  </div>
+  <form class="chat-input" id="chatForm">
+    <input id="chatInput" placeholder="Ask about heat safety..." autocomplete="off" aria-label="Chat message">
+    <button type="submit" aria-label="Send message"><i class="fa-solid fa-paper-plane"></i></button>
+  </form>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+"use strict";
+
+/* -------------------------------------------------------
+   ARKA AI
+   Single-file front-end prototype.
+   Live integrations: Open-Meteo weather, Nominatim geocoding,
+   and OpenStreetMap Overpass hospital lookup.
+------------------------------------------------------- */
+
+const $ = id => document.getElementById(id);
+
+const languageNames = {
+  en:"English",hi:"हिन्दी",gu:"ગુજરાતી",mr:"मराठी",bn:"বাংলা",
+  ta:"தமிழ்",te:"తెలుగు",kn:"ಕನ್ನಡ",ml:"മലയാളം",pa:"ਪੰਜਾਬੀ",
+  or:"ଓଡ଼ିଆ",as:"অসমীয়া",ur:"اردو",kok:"Konkani",ks:"Kashmiri",
+  mni:"Manipuri / Meitei",ne:"Nepali",brx:"Bodo",doi:"Dogri",
+  mai:"Maithili",sat:"Santali",sa:"Sanskrit"
+};
+
+const translations = {
+  en:{
+    navDashboard:"Dashboard",navForecast:"Heat Forecast",navScheduler:"Smart Scheduler",
+    navSafety:"Worker Safety",navHospitals:"Nearby Hospitals",navSupervisor:"Supervisor View",
+    navSettings:"Settings & Location",overview:"YOUR DAILY OVERVIEW",
+    greeting:"Work smarter. Stay safer. ☀️",generate:"Generate Safe Schedule",
+    temperature:"Temperature",feelsLike:"Feels like",humidity:"Humidity",
+    maxTemp:"Forecast maximum",riskScore:"Personalized Heat-Risk Score",
+    hourly:"Hourly Heat Timeline",recommendations:"Today's Safety Actions",
+    schedulePreview:"Recommended Schedule"
+  },
+  hi:{
+    navDashboard:"डैशबोर्ड",navForecast:"गर्मी का पूर्वानुमान",navScheduler:"स्मार्ट शेड्यूल",
+    navSafety:"श्रमिक सुरक्षा",navHospitals:"नज़दीकी अस्पताल",navSupervisor:"सुपरवाइज़र दृश्य",
+    navSettings:"सेटिंग और स्थान",overview:"आपका दैनिक अवलोकन",
+    greeting:"समझदारी से काम करें, सुरक्षित रहें ☀️",generate:"सुरक्षित शेड्यूल बनाएँ",
+    temperature:"तापमान",feelsLike:"महसूस होने वाला तापमान",humidity:"आर्द्रता",
+    maxTemp:"अनुमानित अधिकतम",riskScore:"व्यक्तिगत गर्मी जोखिम स्कोर",
+    hourly:"घंटेवार गर्मी समयरेखा",recommendations:"आज की सुरक्षा सलाह",
+    schedulePreview:"अनुशंसित शेड्यूल"
+  },
+  gu:{
+    navDashboard:"ડેશબોર્ડ",navForecast:"ગરમીની આગાહી",navScheduler:"સ્માર્ટ સમયપત્રક",
+    navSafety:"કામદારની સુરક્ષા",navHospitals:"નજીકની હોસ્પિટલો",navSupervisor:"સુપરવાઇઝર દૃશ્ય",
+    navSettings:"સેટિંગ્સ અને સ્થાન",overview:"તમારી દૈનિક માહિતી",
+    greeting:"સમજદારીથી કામ કરો, સુરક્ષિત રહો ☀️",generate:"સુરક્ષિત સમયપત્રક બનાવો",
+    temperature:"તાપમાન",feelsLike:"અનુભવાતું તાપમાન",humidity:"ભેજ",
+    maxTemp:"આગાહીનું મહત્તમ",riskScore:"વ્યક્તિગત ગરમી જોખમ સ્કોર",
+    hourly:"કલાકવાર ગરમીની સમયરેખા",recommendations:"આજની સુરક્ષા સલાહ",
+    schedulePreview:"ભલામણ કરેલું સમયપત્રક"
+  },
+  mr:{
+    navDashboard:"डॅशबोर्ड",navForecast:"उष्णतेचा अंदाज",navScheduler:"स्मार्ट वेळापत्रक",
+    navSafety:"कामगार सुरक्षा",navHospitals:"जवळची रुग्णालये",navSupervisor:"पर्यवेक्षक दृश्य",
+    navSettings:"सेटिंग्ज आणि स्थान",overview:"तुमचा दैनंदिन आढावा",
+    greeting:"स्मार्ट काम करा, सुरक्षित राहा ☀️",generate:"सुरक्षित वेळापत्रक तयार करा",
+    temperature:"तापमान",feelsLike:"जाणवणारे तापमान",humidity:"आर्द्रता",
+    maxTemp:"अंदाजित कमाल",riskScore:"वैयक्तिक उष्णता जोखीम गुण",
+    hourly:"तासानुसार उष्णता",recommendations:"आजच्या सुरक्षा सूचना",
+    schedulePreview:"शिफारस केलेले वेळापत्रक"
+  },
+  bn:{
+    navDashboard:"ড্যাশবোর্ড",navForecast:"তাপের পূর্বাভাস",navScheduler:"স্মার্ট সময়সূচি",
+    navSafety:"শ্রমিকের নিরাপত্তা",navHospitals:"নিকটবর্তী হাসপাতাল",navSupervisor:"সুপারভাইজার",
+    navSettings:"সেটিংস ও অবস্থান",overview:"আপনার দৈনিক সারাংশ",
+    greeting:"স্মার্টভাবে কাজ করুন, নিরাপদ থাকুন ☀️",generate:"নিরাপদ সময়সূচি তৈরি করুন",
+    temperature:"তাপমাত্রা",feelsLike:"অনুভূত তাপমাত্রা",humidity:"আর্দ্রতা",
+    maxTemp:"পূর্বাভাসের সর্বোচ্চ",riskScore:"ব্যক্তিগত তাপঝুঁকি স্কোর",
+    hourly:"ঘণ্টাভিত্তিক তাপের সময়রেখা",recommendations:"আজকের নিরাপত্তা পরামর্শ",
+    schedulePreview:"প্রস্তাবিত সময়সূচি"
+  },
+  ta:{
+    navDashboard:"டாஷ்போர்டு",navForecast:"வெப்ப முன்னறிவிப்பு",navScheduler:"ஸ்மார்ட் அட்டவணை",
+    navSafety:"தொழிலாளர் பாதுகாப்பு",navHospitals:"அருகிலுள்ள மருத்துவமனைகள்",
+    navSupervisor:"மேற்பார்வையாளர்",navSettings:"அமைப்புகள் மற்றும் இடம்",
+    overview:"உங்கள் தினசரி பார்வை",greeting:"புத்திசாலித்தனமாக வேலை செய்யுங்கள் ☀️",
+    generate:"பாதுகாப்பான அட்டவணையை உருவாக்கு",temperature:"வெப்பநிலை",
+    feelsLike:"உணரப்படும் வெப்பநிலை",humidity:"ஈரப்பதம்",maxTemp:"அதிகபட்ச முன்னறிவிப்பு",
+    riskScore:"தனிப்பட்ட வெப்ப ஆபத்து மதிப்பெண்",hourly:"மணிநேர வெப்ப காலவரிசை",
+    recommendations:"இன்றைய பாதுகாப்பு ஆலோசனைகள்",schedulePreview:"பரிந்துரைக்கப்பட்ட அட்டவணை"
+  },
+  te:{
+    navDashboard:"డాష్‌బోర్డ్",navForecast:"వేడి అంచనా",navScheduler:"స్మార్ట్ షెడ్యూల్",
+    navSafety:"కార్మికుల భద్రత",navHospitals:"సమీప ఆసుపత్రులు",navSupervisor:"సూపర్‌వైజర్",
+    navSettings:"సెట్టింగ్‌లు మరియు స్థానం",overview:"మీ రోజువారీ సమీక్ష",
+    greeting:"తెలివిగా పని చేయండి, సురక్షితంగా ఉండండి ☀️",
+    generate:"సురక్షిత షెడ్యూల్ రూపొందించండి",temperature:"ఉష్ణోగ్రత",
+    feelsLike:"అనుభవించే ఉష్ణోగ్రత",humidity:"తేమ",maxTemp:"గరిష్ఠ అంచనా",
+    riskScore:"వ్యక్తిగత వేడి ప్రమాద స్కోరు",hourly:"గంటలవారీ వేడి కాలక్రమం",
+    recommendations:"నేటి భద్రతా సూచనలు",schedulePreview:"సిఫార్సు చేసిన షెడ్యూల్"
+  },
+  kn:{
+    navDashboard:"ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",navForecast:"ಶಾಖದ ಮುನ್ಸೂಚನೆ",navScheduler:"ಸ್ಮಾರ್ಟ್ ವೇಳಾಪಟ್ಟಿ",
+    navSafety:"ಕಾರ್ಮಿಕರ ಸುರಕ್ಷತೆ",navHospitals:"ಹತ್ತಿರದ ಆಸ್ಪತ್ರೆಗಳು",
+    navSupervisor:"ಮೇಲ್ವಿಚಾರಕ",navSettings:"ಸೆಟ್ಟಿಂಗ್‌ಗಳು ಮತ್ತು ಸ್ಥಳ",
+    overview:"ನಿಮ್ಮ ದೈನಂದಿನ ಅವಲೋಕನ",greeting:"ಬುದ್ಧಿವಂತಿಕೆಯಿಂದ ಕೆಲಸ ಮಾಡಿ, ಸುರಕ್ಷಿತವಾಗಿರಿ ☀️",
+    generate:"ಸುರಕ್ಷಿತ ವೇಳಾಪಟ್ಟಿ ರಚಿಸಿ",temperature:"ತಾಪಮಾನ",
+    feelsLike:"ಅನುಭವವಾಗುವ ತಾಪಮಾನ",humidity:"ಆರ್ದ್ರತೆ",maxTemp:"ಗರಿಷ್ಠ ಮುನ್ಸೂಚನೆ",
+    riskScore:"ವೈಯಕ್ತಿಕ ಶಾಖದ ಅಪಾಯದ ಅಂಕ",hourly:"ಗಂಟೆಗಂಟೆಯ ಶಾಖದ ಸಮಯರೇಖೆ",
+    recommendations:"ಇಂದಿನ ಸುರಕ್ಷತಾ ಸಲಹೆಗಳು",schedulePreview:"ಶಿಫಾರಸು ಮಾಡಿದ ವೇಳಾಪಟ್ಟಿ"
+  }
+};
+
+let currentLanguage = "en";
+let weatherSource = "demo";
+let currentLocation = {name:"Bopal, Ahmedabad, Gujarat",lat:23.0225,lon:72.5714};
+let hourlyData = [];
+let currentRisk = 68;
+let currentTemp = 34;
+let currentHumidity = 55;
+let generatedSchedule = [];
+let waterLogged = Number(localStorage.getItem("ARKA-water") || 0);
+let chartInstances = [];
+
+const jobNames = {
+  construction:"Construction worker",road:"Road maintenance",delivery:"Delivery personnel",
+  vendor:"Street vendor",agriculture:"Agricultural worker",sanitation:"Sanitation worker",
+  security:"Traffic police / outdoor security",technician:"Field technician",
+  student:"College student / outdoor activity",general:"General outdoor worker"
+};
+
+function toast(message){
+  const el=$("toast");
+  el.textContent=message;
+  el.classList.add("show");
+  clearTimeout(toast.timer);
+  toast.timer=setTimeout(()=>el.classList.remove("show"),3000);
+}
+
+function applyLanguage(code){
+  currentLanguage=code;
+  const dictionary=translations[code] || translations.en;
+  document.documentElement.lang=code;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    const key=el.dataset.i18n;
+    el.textContent=dictionary[key] || translations.en[key] || el.textContent;
+  });
+  $("languageSelect").value=code;
+  $("settingsLanguage").value=code;
+  localStorage.setItem("ARKA-language",code);
+  renderRecommendations();
+  renderPreviewSchedule();
+  renderChart();
+  renderForecastTable();
+  if(generatedSchedule.length) renderGeneratedSchedule();
+  toast(languageNames[code] + (translations[code] ? " selected" : " selected · English fallback for untranslated labels"));
+}
+
+function populateLanguages(){
+  $("settingsLanguage").innerHTML=Object.entries(languageNames)
+    .map(([code,name])=>`<option value="${code}">${name}</option>`).join("");
+}
+
+function showPage(name){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  $("page-"+name).classList.add("active");
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.page===name));
+  const active=document.querySelector(`.nav-btn[data-page="${name}"]`);
+  $("pageTitle").textContent=active ? active.innerText.trim() : "ARKA AI";
+  $("dateText").textContent=new Date().toLocaleDateString(undefined,{weekday:"long",month:"short",day:"numeric",year:"numeric"});
+  $("sidebar").classList.remove("open");
+  if(name==="forecast") renderForecastTable();
+  if(name==="supervisor") renderSupervisor();
+  if(name==="hospitals") $("hospitalLocation").value=currentLocation.name;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+document.querySelectorAll(".nav-btn").forEach(btn=>{
+  btn.addEventListener("click",()=>showPage(btn.dataset.page));
+});
+$("menuToggle").addEventListener("click",()=>$("sidebar").classList.toggle("open"));
+$("languageSelect").addEventListener("change",e=>applyLanguage(e.target.value));
+$("chartMode").addEventListener("change",()=>{renderChart();renderForecastChart();});
+
+/* Demo hourly data */
+function makeDemoData(){
+  const temps=[28,27,27,28,30,32,34,36,38,39,39,38,37,36,35,34,33,31,30,29,28,28,27,27];
+  const hums=[75,78,79,77,70,64,57,51,46,43,42,43,46,49,52,55,58,62,66,69,72,74,76,77];
+  hourlyData=temps.map((t,i)=>{
+    const hour=i;
+    const solar=Math.max(0,Math.sin((hour-6)/12*Math.PI));
+    const feels=Math.round(t+Math.max(0,(hums[i]-40)*0.055)+solar*2);
+    return {hour,temp:t,humidity:hums[i],feels,wind:Math.round(7+4*Math.sin(i/3)),solar,risk:0};
+  });
+  recalculateRisk();
+  weatherSource="demo";
+  updateWeatherUI();
+}
+
+function calculateRisk(t,hum,intensity="high",shade="partial",solar=0.5){
+  const intensityFactor={light:0,moderate:9,high:18}[intensity] ?? 18;
+  const shadeFactor={yes:-7,partial:0,no:9}[shade] ?? 0;
+  // Illustrative heuristic only. Not WBGT or medical risk.
+  const tempComponent=Math.max(0,Math.min(62,(t-20)*3.0));
+  const humidityComponent=Math.max(0,Math.min(16,(hum-30)*0.30));
+  const solarComponent=Math.max(0,Math.min(10,solar*10));
+  return Math.max(0,Math.min(100,Math.round(tempComponent+humidityComponent+solarComponent+intensityFactor+shadeFactor)));
+}
+
+function recalculateRisk(){
+  const intensity=$("intensity")?.value || "high";
+  const shade=$("shade")?.value || "partial";
+  hourlyData.forEach(d=>{
+    d.risk=calculateRisk(d.temp,d.humidity,intensity,shade,d.solar ?? 0.5);
+  });
+  const now=new Date();
+  const h=now.getHours();
+  const d=hourlyData[h] || hourlyData[12];
+  currentTemp=d.temp;
+  currentHumidity=d.humidity;
+  currentRisk=d.risk;
+}
+
+function riskInfo(score){
+  if(score<25)return {name:"Lower estimated risk",className:"low",color:"#70b34c",desc:"Conditions appear comparatively less stressful in this illustrative model. Continue monitoring local conditions."};
+  if(score<50)return {name:"Moderate estimated risk",className:"moderate",color:"#d8b33f",desc:"Use preventive measures, ensure recovery breaks, and reassess as conditions change."};
+  if(score<75)return {name:"High estimated risk",className:"high",color:"#ed914b",desc:"Heat exposure may be significant. Reassess working conditions and consider moving heavy outdoor tasks to cooler periods."};
+  return {name:"Very high estimated risk",className:"very-high",color:"#df5552",desc:"Potentially dangerous exposure. Follow official warnings and workplace protocols; exposed work may need to be stopped or relocated."};
+}
+
+function updateWeatherUI(){
+  const now=new Date();
+  const data=hourlyData[now.getHours()] || hourlyData[12];
+  currentTemp=data.temp;
+  currentHumidity=data.humidity;
+  currentRisk=data.risk;
+  const maxTemp=Math.max(...hourlyData.map(d=>d.temp));
+  const feels=Math.round(data.feels ?? data.temp+3);
+  $("tempStat").textContent=data.temp+"°C";
+  $("feelsStat").textContent=feels+"°C";
+  $("humidityStat").textContent=data.humidity+"%";
+  $("maxStat").textContent=maxTemp+"°C";
+  $("tempFoot").textContent=weatherSource==="live"?"Live API forecast":"Simulated demo data";
+  $("forecastFoot").textContent=weatherSource==="live"?"Open-Meteo forecast":"Illustrative daily high";
+  $("topLocation").textContent=currentLocation.name;
+  $("forecastLocation").textContent=currentLocation.name+" · "+(weatherSource==="live"?"Open-Meteo":"Demo data");
+  $("sourceLabel").textContent=weatherSource==="live"?"Open-Meteo · forecast grid":"Demo data · simulated resolution";
+  $("confidenceLabel").textContent="Confidence: not calibrated";
+  $("supervisorSource").textContent=weatherSource==="live"?"Live API":"Demo";
+  $("weatherSourceDetails").textContent=weatherSource==="live"
+    ?"Weather data retrieved from Open-Meteo. This is forecast-grid data, not verified street-level observation."
+    :"Simulated demonstration values. Select Refresh forecast to attempt a live Open-Meteo request.";
+  const info=riskInfo(currentRisk);
+  $("riskNumber").textContent=currentRisk;
+  $("riskCategory").textContent=info.name;
+  $("riskCategory").style.color=info.color;
+  $("riskDescription").textContent=info.desc;
+  $("gaugeProgress").style.strokeDashoffset=408.4-(408.4*currentRisk/100);
+  $("gaugeProgress").style.stroke=info.color;
+  $("riskPill").textContent="● "+info.name.replace("estimated risk","");
+  $("tempFactorText").textContent=data.temp>=37?"High":data.temp>=32?"Moderate":"Lower";
+  $("tempFactorBar").style.width=Math.min(100,Math.max(5,(data.temp-20)*5))+"%";
+  const intensity=$("intensity")?.value||"high";
+  $("intensityText").textContent=intensity[0].toUpperCase()+intensity.slice(1);
+  $("intensityBar").style.width=({light:30,moderate:60,high:90})[intensity]+"%";
+  if(currentRisk>=75){
+    $("alertTitle").textContent="VERY HIGH ESTIMATED HEAT RISK";
+    $("alertTag").textContent="HIGH ALERT";
+    $("alertText").textContent="Potentially dangerous heat exposure is indicated by the illustrative model. Check official warnings and workplace protocols; stop or relocate exposed work when required.";
+  }else if(currentRisk>=50){
+    $("alertTitle").textContent="HEAT ADVISORY · "+(weatherSource==="live"?"FORECAST DATA":"DEMO FORECAST");
+    $("alertTag").textContent="TAKE CARE";
+    $("alertText").textContent="Heat exposure may increase later in the day. Review hourly conditions, schedule recovery breaks, and follow workplace safety rules.";
+  }else{
+    $("alertTitle").textContent="HEAT CONDITIONS · KEEP MONITORING";
+    $("alertTag").textContent="STAY ALERT";
+    $("alertText").textContent="The current estimate is comparatively lower, but conditions can change. Maintain hydration and follow safety procedures.";
+  }
+  renderRecommendations();
+  renderPreviewSchedule();
+  renderChart();
+  renderForecastChart();
+  renderForecastTable();
+  renderSupervisor();
+}
+
+function renderRecommendations(){
+  const info=riskInfo(currentRisk);
+  const recs=[
+    ["fa-droplet","icon-blue","Hydration","Drink water regularly and follow workplace hydration guidance. Individual needs vary."],
+    ["fa-tree","icon-green","Shade and recovery","Use a shaded or cooled recovery area. Increase recovery according to heat and workload."],
+    ["fa-person-walking","icon-orange","Adjust workload",currentRisk>=75?"Avoid exposed heavy work when required by safety protocols; move indoors or suspend.":"Schedule demanding tasks in comparatively cooler periods and reassess conditions."],
+    ["fa-people-arrows-left-right","icon-red","Buddy checks","Watch for dizziness, nausea, confusion, unusual weakness, or collapse. Escalate urgent symptoms immediately."]
+  ];
+  $("recommendationList").innerHTML=recs.map(r=>`
+    <div class="recommendation">
+      <div class="rec-icon ${r[1]}"><i class="fa-solid ${r[0]}"></i></div>
+      <div><h4>${r[2]}</h4><p>${r[3]}</p></div>
+    </div>`).join("");
+}
+
+function renderPreviewSchedule(){
+  const blocks=getScheduleBlocks();
+  $("previewSchedule").innerHTML=blocks.slice(0,3).map(b=>`
+    <div class="schedule-item">
+      <div class="schedule-time">${b.time}</div>
+      <div class="timeline-dot" style="background:${b.color}"></div>
+      <div><h4>${b.title}</h4><p>${b.description}</p><span class="risk-label ${b.className}">${b.risk}</span></div>
+    </div>`).join("");
+}
+
+function getScheduleBlocks(){
+  const high=hourlyData.some(d=>d.risk>=75);
+  return [
+    {time:"5:30–8:30 AM",title:"Early outdoor tasks",description:"Prioritize suitable demanding tasks only if the forecast and on-site conditions permit.",risk:"Reassess conditions",className:"low",color:"#70b34c"},
+    {time:"8:30–10:30 AM",title:"Moderate tasks + recovery",description:"Reduce intensity as needed, take scheduled breaks, and reassess heat exposure.",risk:"Variable",className:"moderate",color:"#d8b33f"},
+    {time:"10:30 AM–4 PM",title:high?"High-risk period: review work":"Peak heat: monitor conditions",description:"Consider indoor tasks, cooling, or suspending exposed work according to the actual risk and applicable rules.",risk:high?"Potentially high":"Reassess",className:high?"very-high":"high",color:high?"#df5552":"#ed914b"},
+    {time:"4–6:30 PM",title:"Reassess before resuming",description:"Resume only if current conditions and the workplace safety protocol permit.",risk:"Variable",className:"moderate",color:"#d8b33f"}
+  ];
+}
+
+/* Canvas chart without external chart dependencies */
+function drawChart(canvasId,values,labels,color="#ed914b",maxValue=100){
+  const canvas=$(canvasId);
+  if(!canvas)return;
+  const rect=canvas.getBoundingClientRect();
+  if(rect.width<10)return;
+  const dpr=window.devicePixelRatio||1;
+  canvas.width=rect.width*dpr;
+  canvas.height=rect.height*dpr;
+  const ctx=canvas.getContext("2d");
+  ctx.scale(dpr,dpr);
+  const w=rect.width,h=rect.height;
+  const pad={left:31,right:10,top:14,bottom:25};
+  const cw=w-pad.left-pad.right,ch=h-pad.top-pad.bottom;
+  ctx.clearRect(0,0,w,h);
+  ctx.font="10px Inter, sans-serif";
+  ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){
+    const y=pad.top+ch*i/4;
+    ctx.strokeStyle="#edf1ee";
+    ctx.beginPath();ctx.moveTo(pad.left,y);ctx.lineTo(w-pad.right,y);ctx.stroke();
+    ctx.fillStyle="#81918f";
+    ctx.textAlign="right";
+    ctx.fillText(String(Math.round(maxValue*(1-i/4))),pad.left-7,y+3);
+  }
+  const points=values.map((v,i)=>({
+    x:pad.left+(values.length===1?0:i/(values.length-1))*cw,
+    y:pad.top+ch-(Math.max(0,Math.min(maxValue,v))/maxValue)*ch
+  }));
+  if(points.length>1){
+    const gradient=ctx.createLinearGradient(0,pad.top,0,h-pad.bottom);
+    gradient.addColorStop(0,color+"40");gradient.addColorStop(1,color+"00");
+    ctx.beginPath();ctx.moveTo(points[0].x,h-pad.bottom);
+    points.forEach(p=>ctx.lineTo(p.x,p.y));
+    ctx.lineTo(points[points.length-1].x,h-pad.bottom);ctx.closePath();
+    ctx.fillStyle=gradient;ctx.fill();
+    ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));
+    ctx.strokeStyle=color;ctx.lineWidth=2.5;ctx.stroke();
+  }
+  points.forEach((p,i)=>{
+    if(i%3===0||i===points.length-1){
+      ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();
+      ctx.fillStyle="#81918f";ctx.textAlign="center";
+      ctx.fillText(labels[i]||"",p.x,h-7);
+    }
+  });
+}
+
+function renderChart(){
+  const mode=$("chartMode")?.value||"risk";
+  const values=hourlyData.map(d=>mode==="temp"?d.temp:mode==="humidity"?d.humidity:d.risk);
+  const max=mode==="temp"?50:mode==="humidity"?100:100;
+  const color=mode==="temp"?"#e96e50":mode==="humidity"?"#55b8d8":"#ed914b";
+  drawChart("heatChart",values,hourlyData.map(d=>String(d.hour).padStart(2,"0")+":00"),color,max);
+}
+function renderForecastChart(){
+  const mode=$("chartMode")?.value||"risk";
+  const values=hourlyData.map(d=>mode==="temp"?d.temp:mode==="humidity"?d.humidity:d.risk);
+  drawChart("forecastChart",values,hourlyData.map(d=>String(d.hour).padStart(2,"0")),mode==="temp"?"#e96e50":"#ed914b",mode==="temp"?50:100);
+}
+function renderForecastTable(){
+  $("forecastTable").innerHTML=hourlyData.filter((d,i)=>i%2===0).map(d=>{
+    const info=riskInfo(d.risk);
+    return `<tr><td>${String(d.hour).padStart(2,"0")}:00</td><td>${d.temp}°C</td><td>${d.feels}°C</td><td>${d.humidity}%</td><td>${d.wind} km/h</td><td><span class="risk-label ${info.className}">${d.risk} · ${info.name.split(" ")[0]}</span></td></tr>`;
+  }).join("");
+}
+
+/* Live forecast: Open-Meteo needs no API key */
+async function geocodeLocation(query){
+  const url="https://geocoding-api.open-meteo.com/v1/search?name="+encodeURIComponent(query)+"&count=5&language=en&format=json";
+  const res=await fetch(url);
+  if(!res.ok)throw new Error("Geocoding request failed");
+  const json=await res.json();
+  if(!json.results?.length)throw new Error("Location not found. Try a city or district name.");
+  const results=json.results;
+  const match=results.find(r=>query.toLowerCase().includes((r.name||"").toLowerCase()))||results[0];
+  return {name:[match.name,match.admin1,match.country].filter(Boolean).join(", "),lat:match.latitude,lon:match.longitude};
+}
+
+async function loadWeather(){
+  const query=$("settingsLocation").value.trim()||$("workLocation").value.trim()||currentLocation.name;
+  toast("Loading forecast…");
+  try{
+    const loc=await geocodeLocation(query);
+    const url=`https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,shortwave_radiation&forecast_days=2&timezone=auto`;
+    const res=await fetch(url);
+    if(!res.ok)throw new Error("Weather service is unavailable");
+    const data=await res.json();
+    if(!data.hourly?.time?.length)throw new Error("No hourly forecast returned");
+    currentLocation=loc;
+    const localHour=new Date().getHours();
+    const day=new Date().toISOString().slice(0,10);
+    const indices=[];
+    data.hourly.time.forEach((time,i)=>{if(time.startsWith(day))indices.push(i);});
+    const chosen=indices.length?indices:Array.from({length:24},(_,i)=>i).filter(i=>i<data.hourly.time.length);
+    hourlyData=chosen.map(i=>{
+      const temp=Number(data.hourly.temperature_2m[i] ?? 30);
+      const humidity=Number(data.hourly.relative_humidity_2m[i] ?? 50);
+      const solar=Number(data.hourly.shortwave_radiation[i] ?? 0)/1000;
+      return {
+        hour:Number(data.hourly.time[i].slice(11,13)),
+        temp,humidity,
+        feels:Number(data.hourly.apparent_temperature[i] ?? temp),
+        wind:Number(data.hourly.wind_speed_10m[i] ?? 0),
+        solar,
+        risk:calculateRisk(temp,humidity,$("intensity").value,$("shade").value,solar)
+      };
+    });
+    if(!hourlyData.length)throw new Error("No forecast for the selected date");
+    weatherSource="live";
+    $("settingsLocation").value=loc.name;
+    $("workLocation").value=loc.name;
+    $("hospitalLocation").value=loc.name;
+    $("stateSelect").value=guessState(loc.name);
+    updateWeatherUI();
+    toast("Forecast updated. Check source and resolution.");
+  }catch(err){
+    toast("Live forecast unavailable: "+err.message+" · Showing demo data.");
+    $("chartNote").textContent="Live request failed. The dashboard is showing simulated demo data.";
+  }
+}
+
+function guessState(name){
+  const lower=name.toLowerCase();
+  const states=["Gujarat","Maharashtra","Rajasthan","Tamil Nadu","Telangana","Karnataka","Kerala","West Bengal","Punjab","Odisha","Assam","Delhi","Uttar Pradesh","Madhya Pradesh","Bihar","Jharkhand","Chhattisgarh","Goa","Haryana","Himachal Pradesh","Uttarakhand","Andhra Pradesh","Arunachal Pradesh","Manipur","Meghalaya","Mizoram","Nagaland","Sikkim","Tripura","Jammu and Kashmir","Ladakh","Puducherry"];
+  return states.find(s=>lower.includes(s.toLowerCase()))||$("stateSelect").value;
+}
+
+function saveSettings(){
+  const lang=$("settingsLanguage").value;
+  currentLocation.name=$("settingsLocation").value.trim()||currentLocation.name;
+  $("workLocation").value=currentLocation.name;
+  $("hospitalLocation").value=currentLocation.name;
+  localStorage.setItem("ARKA-location",currentLocation.name);
+  localStorage.setItem("ARKA-state",$("stateSelect").value);
+  applyLanguage(lang);
+  $("topLocation").textContent=currentLocation.name;
+  toast("Preferences saved on this device.");
+}
+
+/* Location permission */
+function useGPS(){
+  if(!navigator.geolocation){toast("Geolocation is not supported by this browser.");return;}
+  toast("Requesting location permission…");
+  navigator.geolocation.getCurrentPosition(async pos=>{
+    const lat=pos.coords.latitude,lon=pos.coords.longitude;
+    currentLocation={name:`GPS location (${lat.toFixed(3)}, ${lon.toFixed(3)})`,lat,lon};
+    $("settingsLocation").value=currentLocation.name;
+    $("workLocation").value=currentLocation.name;
+    $("hospitalLocation").value=currentLocation.name;
+    // Use coordinates directly for weather rather than attempting to geocode the label.
+    try{await loadWeatherCoordinates(lat,lon);}catch(e){toast("Location found, but weather could not be loaded.");}
+    toast("Location detected. Forecast resolution depends on the data source.");
+  },err=>toast("Location unavailable. Allow location access or enter a place manually."),
+  {enableHighAccuracy:false,timeout:12000,maximumAge:300000});
+}
+
+async function loadWeatherCoordinates(lat,lon){
+  const url=`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,shortwave_radiation&forecast_days=2&timezone=auto`;
+  const res=await fetch(url);
+  if(!res.ok)throw new Error("Weather request failed");
+  const data=await res.json();
+  const today=new Date().toISOString().slice(0,10);
+  const indices=[];
+  data.hourly.time.forEach((time,i)=>{if(time.startsWith(today))indices.push(i);});
+  hourlyData=indices.map(i=>{
+    const temp=Number(data.hourly.temperature_2m[i]??30);
+    const humidity=Number(data.hourly.relative_humidity_2m[i]??50);
+    const solar=Number(data.hourly.shortwave_radiation[i]??0)/1000;
+    return {hour:Number(data.hourly.time[i].slice(11,13)),temp,humidity,feels:Number(data.hourly.apparent_temperature[i]??temp),wind:Number(data.hourly.wind_speed_10m[i]??0),solar,risk:calculateRisk(temp,humidity,$("intensity").value,$("shade").value,solar)};
+  });
+  weatherSource="live";
+  updateWeatherUI();
+}
+
+/* Schedule generator */
+function generateSchedule(){
+  const start=$("shiftStart").value;
+  const end=$("shiftEnd").value;
+  if(!start||!end){toast("Please enter shift start and end times.");return;}
+  if(end<=start){toast("Shift end must be later than shift start on the same day.");return;}
+  recalculateRisk();
+  const intensity=$("intensity").value;
+  const shade=$("shade").value;
+  const duration=Number($("duration").value);
+  const breakEvery=Number($("breakFrequency").value);
+  const shiftStart=Number(start.split(":")[0])*60+Number(start.split(":")[1]);
+  const shiftEnd=Number(end.split(":")[0])*60+Number(end.split(":")[1]);
+  const total=shiftEnd-shiftStart;
+  const available=hourlyData.filter(d=>d.hour>=Math.floor(shiftStart/60)&&d.hour<Math.ceil(shiftEnd/60));
+  const peak=Math.max(...available.map(d=>d.risk),currentRisk);
+  const job=jobNames[$("jobType").value];
+  generatedSchedule=[];
+  const add=(time,title,description,risk,cls)=>{
+    generatedSchedule.push({time,title,description,risk,cls});
+  };
+  if(peak>=75){
+    add("Shift review","Review conditions before starting","The model indicates a potentially very high risk during at least part of the shift. Check official warnings and on-site conditions before assigning exposed work.","Very high · review","very-high");
+  }
+  add(formatMinutes(shiftStart)+"–"+formatMinutes(Math.min(shiftStart+Math.min(90,total),shiftEnd)),
+      "Initial work block · "+job,
+      "Start only if current conditions and the workplace safety protocol permit. Confirm water, shade, communication, and buddy checks.",
+      peak>=75?"Reassess before work":"Reassess conditions",
+      peak>=75?"very-high":"low");
+
+  let cursor=shiftStart+Math.min(90,total);
+  let outdoorUsed=Math.min(90,duration*60);
+  let taskIndex=1;
+  while(cursor<shiftEnd){
+    const hourData=hourlyData.find(d=>d.hour===Math.floor(cursor/60));
+    const score=hourData?.risk??currentRisk;
+    const nextBreak=Math.min(cursor+breakEvery,shiftEnd);
+    const blockLength=nextBreak-cursor;
+    if(score>=75){
+      add(formatMinutes(cursor)+"–"+formatMinutes(nextBreak),
+          "Cooling / indoor task block",
+          "Avoid exposed strenuous work when required. Use a cooler location, reduce workload, or suspend work according to safety rules.",
+          "Very high · act on protocol","very-high");
+    }else if(score>=50){
+      add(formatMinutes(cursor)+"–"+formatMinutes(nextBreak),
+          "Reduced-intensity work + recovery",
+          "Consider lighter tasks, shade, closer monitoring, and more recovery if needed.",
+          "High · reassess","high");
+    }else{
+      add(formatMinutes(cursor)+"–"+formatMinutes(nextBreak),
+          taskIndex===1?"Priority outdoor task":"Scheduled work block",
+          "Use this period only if conditions are appropriate. Take the planned recovery break and monitor symptoms.",
+          score<25?"Lower estimated risk":"Moderate · monitor",
+          score<25?"low":"moderate");
+    }
+    cursor=nextBreak;
+    if(cursor<shiftEnd){
+      const breakEnd=Math.min(cursor+10,shiftEnd);
+      add(formatMinutes(cursor)+"–"+formatMinutes(breakEnd),"Recovery + hydration break",
+        "Move to shade or a cool area, drink according to workplace guidance, and reassess how you feel.",
+        "Recovery","low");
+      cursor=breakEnd;
+    }
+    taskIndex++;
+    if(generatedSchedule.length>50)break;
+  }
+  if(peak>=75){
+    generatedSchedule.push({time:"Before resuming",title:"Supervisor reassessment",description:"Resume exposed work only after conditions have been reassessed and applicable safety rules permit it.",risk:"Mandatory review",cls:"very-high"});
+  }
+  renderGeneratedSchedule();
+  updateWeatherUI();
+  toast("Schedule generated. Review each recommendation before use.");
+}
+
+function formatMinutes(minutes){
+  const h=Math.floor(minutes/60),m=minutes%60;
+  const suffix=h>=12?"PM":"AM";
+  const hour=h%12||12;
+  return `${hour}:${String(m).padStart(2,"0")} ${suffix}`;
+}
+
+function renderGeneratedSchedule(){
+  const job=jobNames[$("jobType").value];
+  $("scheduleResults").innerHTML=`
+    <div class="card" style="margin-top:8px;background:#f9fbf9;box-shadow:none">
+      <div class="card-head"><div><h3>Generated work plan</h3><p>${job} · ${currentLocation.name} · ${$("workDate").value||"Today"}</p></div><span class="pill">● ${weatherSource==="live"?"Forecast-based estimate":"Demo scenario"}</span></div>
+      <div class="alert-banner" style="margin-bottom:15px">
+        <div class="alert-icon"><i class="fa-solid fa-shield-heart"></i></div>
+        <div><strong>Review before assigning work</strong><p>This schedule is heuristic decision support. It does not calculate a validated WBGT value or guarantee safe conditions.</p></div>
+      </div>
+      ${generatedSchedule.map(b=>`
+        <div class="schedule-item">
+          <div class="schedule-time">${b.time}</div>
+          <div class="timeline-dot" style="background:${b.cls==="very-high"?"#df5552":b.cls==="high"?"#ed914b":b.cls==="moderate"?"#d8b33f":"#70b34c"}"></div>
+          <div><h4>${b.title}</h4><p>${b.description}</p><span class="risk-label ${b.cls}">${b.risk}</span></div>
+        </div>`).join("")}
+    </div>`;
+}
+
+function downloadSchedule(){
+  if(!generatedSchedule.length){toast("Generate a schedule first.");return;}
+  const rows=[["Time","Activity","Explanation","Risk"],...generatedSchedule.map(b=>[b.time,b.title,b.description,b.risk])];
+  const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\n");
+  downloadFile("ARKA-schedule.csv",csv,"text/csv;charset=utf-8;");
+}
+async function shareSchedule(){
+  if(!generatedSchedule.length){toast("Generate a schedule first.");return;}
+  const text="ARKA AI work plan\n"+generatedSchedule.map(b=>`${b.time}: ${b.title} — ${b.risk}`).join("\n");
+  if(navigator.share){
+    try{await navigator.share({title:"ARKA AI schedule",text});}catch(e){}
+  }else if(navigator.clipboard){
+    try{await navigator.clipboard.writeText(text);toast("Schedule copied to clipboard.");}catch(e){toast("Sharing unavailable in this browser.");}
+  }else toast("Sharing is unavailable in this browser.");
+}
+function downloadFile(name,content,type){
+  const blob=new Blob([content],{type});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");a.href=url;a.download=name;a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+/* Hospital lookup via OpenStreetMap Overpass */
+async function searchHospitals(){
+  const query=$("hospitalLocation").value.trim()||currentLocation.name;
+  $("hospitalResults").innerHTML='<div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i><br>Searching mapped hospitals…</div>';
+  try{
+    let loc=currentLocation;
+    if(query!==currentLocation.name)loc=await geocodeLocation(query);
+    const radius=5000;
+    const overpass=`[out:json][timeout:20];(node["amenity"~"hospital|clinic"](around:${radius},${loc.lat},${loc.lon});way["amenity"~"hospital|clinic"](around:${radius},${loc.lat},${loc.lon});relation["amenity"="hospital"](around:${radius},${loc.lat},${loc.lon}););out center tags;`;
+    const response=await fetch("https://overpass-api.de/api/interpreter",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"},body:"data="+encodeURIComponent(overpass)});
+    if(!response.ok)throw new Error("Hospital data service is unavailable");
+    const data=await response.json();
+    const results=(data.elements||[]).map(el=>{
+      const lat=el.lat??el.center?.lat,lon=el.lon??el.center?.lon,t=el.tags||{};
+      if(lat==null||lon==null)return null;
+      return {name:t.name||t["name:en"]||"Unnamed healthcare facility",lat,lon,address:[t["addr:street"],t["addr:city"]].filter(Boolean).join(", "),phone:t.phone||t["contact:phone"]||"",emergency:t.emergency||""};
+    }).filter(Boolean).sort((a,b)=>distanceKm(loc.lat,loc.lon,a.lat,a.lon)-distanceKm(loc.lat,loc.lon,b.lat,b.lon)).slice(0,12);
+    $("mapLink").href=`https://www.openstreetmap.org/?mlat=${loc.lat}&mlon=${loc.lon}#map=14/${loc.lat}/${loc.lon}`;
+    if(!results.length){
+      $("hospitalResults").innerHTML='<div class="empty-state">No mapped hospitals or clinics were found in this search area. Try a larger nearby city.</div>';
+      return;
+    }
+    $("hospitalResults").innerHTML=results.map(h=>{
+      const dist=distanceKm(loc.lat,loc.lon,h.lat,h.lon);
+      return `<div class="hospital-item">
+        <div class="hospital-icon"><i class="fa-solid fa-hospital"></i></div>
+        <div style="flex:1;min-width:0">
+          <h4>${escapeHTML(h.name)}</h4>
+          <p>${h.address?escapeHTML(h.address)+" · ":""}${dist.toFixed(1)} km straight-line distance<br>${h.phone?"Phone: "+escapeHTML(h.phone):"Phone not listed in map data"}<br>Emergency services: ${h.emergency?escapeHTML(h.emergency):"Not verified in map data"}</p>
+          <a href="https://www.openstreetmap.org/directions?from=&to=${h.lat}%2C${h.lon}" target="_blank" rel="noopener">Directions <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+          ${h.phone?` · <a href="tel:${escapeHTML(h.phone)}">Call facility</a>`:""}
+        </div></div>`;
+    }).join("");
+  }catch(err){
+    $("hospitalResults").innerHTML=`<div class="empty-state"><i class="fa-solid fa-triangle-exclamation"></i><br>${escapeHTML(err.message)}<br>Check your internet connection or open the map directly.</div>`;
+  }
+}
+function distanceKm(lat1,lon1,lat2,lon2){
+  const r=Math.PI/180,dLat=(lat2-lat1)*r,dLon=(lon2-lon1)*r;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*r)*Math.cos(lat2*r)*Math.sin(dLon/2)**2;
+  return 6371*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+function escapeHTML(value){
+  return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+/* Supervisor demo table */
+function renderSupervisor(){
+  const sites=[
+    {site:currentLocation.name,team:"Construction · 12",risk:currentRisk,action:currentRisk>=75?"Review / stop exposed work as required":currentRisk>=50?"Move heavy work to cooler periods":"Continue monitoring"},
+    {site:"Road maintenance · Demo",team:"Road crew · 7",risk:Math.min(100,currentRisk+8),action:"Check forecast and recovery facilities"},
+    {site:"Delivery zone · Demo",team:"Delivery · 5",risk:Math.max(0,currentRisk-10),action:"Use flexible routes and regular recovery"}
+  ];
+  $("supervisorTable").innerHTML=sites.map(s=>{
+    const info=riskInfo(s.risk);
+    return `<tr><td>${escapeHTML(s.site)}</td><td>${s.team}</td><td><span class="risk-label ${info.className}">${info.name} (${s.risk})</span></td><td>${s.action}</td></tr>`;
+  }).join("");
+}
+function downloadSupervisorCSV(){
+  const rows=[["Worksite","Team","Risk score","Status","Recommended action"]];
+  rows.push([currentLocation.name,"Construction · 12",currentRisk,riskInfo(currentRisk).name,"Review conditions and applicable safety protocols"]);
+  rows.push(["Road maintenance · Demo","Road crew · 7",Math.min(100,currentRisk+8),riskInfo(Math.min(100,currentRisk+8)).name,"Check forecast and recovery facilities"]);
+  rows.push(["Delivery zone · Demo","Delivery · 5",Math.max(0,currentRisk-10),riskInfo(Math.max(0,currentRisk-10)).name,"Use flexible routes and recovery"]);
+  downloadFile("ARKA-supervisor.csv",rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\n"),"text/csv;charset=utf-8;");
+}
+
+/* Hydration demo tracker */
+function updateWater(){
+  $("waterCount").innerHTML=`${waterLogged} <span style="font-size:14px;color:var(--muted)">drinks logged</span>`;
+  $("waterBar").style.width=Math.min(100,waterLogged*12.5)+"%";
+  localStorage.setItem("ARKA-water",String(waterLogged));
+}
+function addWater(){waterLogged++;updateWater();toast("Drink logged. Follow your individual hydration guidance.");}
+function resetWater(){waterLogged=0;updateWater();toast("Today's drink counter reset.");}
+
+function enableReminders(){
+  if(!("Notification" in window)){toast("Browser notifications are not supported.");return;}
+  Notification.requestPermission().then(permission=>{
+    if(permission==="granted"){
+      new Notification("ARKA AI",{body:"Reminder: check your conditions, take recovery breaks, and drink according to workplace guidance."});
+      toast("Reminder permission granted. This demo does not run a background notification service.");
+    }else toast("Notification permission was not granted.");
+  });
+}
+
+/* Demo chatbot. Replace this handler with a secure server-side AI API. */
+$("chatLauncher").addEventListener("click",()=>$("chatPanel").classList.toggle("open"));
+$("chatClose").addEventListener("click",()=>$("chatPanel").classList.remove("open"));
+$("chatForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const input=$("chatInput"),text=input.value.trim();
+  if(!text)return;
+  addMessage(text,"user");input.value="";
+  setTimeout(()=>addMessage(chatResponse(text),"bot"),250);
+});
+function askSuggestion(text){addMessage(text,"user");setTimeout(()=>addMessage(chatResponse(text),"bot"),250);}
+function addMessage(text,who){
+  const el=document.createElement("div");
+  el.className="message "+who;
+  el.textContent=text;
+  $("chatMessages").appendChild(el);
+  $("chatMessages").scrollTop=$("chatMessages").scrollHeight;
+}
+function chatResponse(question){
+  const q=question.toLowerCase();
+  const hi=currentLanguage==="hi",gu=currentLanguage==="gu";
+  if(/dizz|confus|collapse|heatstroke|unconscious|बेहोश|ચક્કર|બેભાન/.test(q)){
+    if(hi)return "काम तुरंत रोकें। व्यक्ति को ठंडी जगह ले जाएँ, तेजी से ठंडा करना शुरू करें और गंभीर लक्षणों पर 112 पर कॉल करें। भ्रमित या बेहोश व्यक्ति को पीने के लिए कुछ न दें। चिकित्सा सहायता में देरी न करें।";
+    if(gu)return "કામ તરત બંધ કરો. વ્યક્તિને ઠંડી જગ્યાએ લઈ જાઓ, શરીર ઠંડું કરવાનું શરૂ કરો અને ગંભીર લક્ષણો હોય તો 112 પર કૉલ કરો. બેભાન વ્યક્તિને પીવા માટે કંઈ આપશો નહીં. તબીબી મદદમાં વિલંબ ન કરો.";
+    return "Stop work immediately. Move the person to a cooler area, begin rapid cooling, and call 112 for serious symptoms or suspected heatstroke. Do not give fluids to someone who is confused or unconscious. Do not delay emergency care.";
+  }
+  if(/hospital|હોસ્પિટલ|अस्पताल/.test(q)){
+    return "Open the Nearby Hospitals section and search your selected location. Map listings may be incomplete, so verify emergency services and contact details directly. For an emergency in India, call 112.";
+  }
+  if(/schedule|plan|shift|સમયપત્રક|शेड्यूल/.test(q)){
+    return "Open Smart Scheduler, choose your job type and intensity, set your shift, and select Generate Safe Work Schedule. The schedule uses the currently displayed forecast or demo values. Review every recommendation against current conditions and workplace safety rules.";
+  }
+  if(/risk|score|safe|afternoon|today|forecast|ગરમી|गर्मी/.test(q)){
+    return `The dashboard currently shows ${currentTemp}°C, ${currentHumidity}% humidity, and an illustrative heat-risk score of ${currentRisk}/100 (${riskInfo(currentRisk).name}). Data source: ${weatherSource==="live"?"Open-Meteo forecast":"simulated demo data"}. This score is not a validated WBGT measurement and cannot certify a time as safe. Check official warnings and on-site conditions.`;
+  }
+  if(/gujarati|hindi|language|ભાષા|भाषा/.test(q)){
+    return "Use the language selector in the top-right corner. The prototype includes interface translations for English, Hindi, Gujarati, Marathi, Bengali, Tamil, Telugu, and Kannada. Other listed languages currently fall back to English for untranslated interface text.";
+  }
+  return `I can explain the current dashboard, work scheduler, and general heat-safety practices. The current score is ${currentRisk}/100 and the data source is ${weatherSource==="live"?"Open-Meteo":"demo data"}. This is a scripted demo assistant, not a live AI model. For a medical emergency, stop work, start cooling, and call 112.`;
+}
+
+/* Keep the charts sharp on resizing */
+let resizeTimer;
+window.addEventListener("resize",()=>{
+  clearTimeout(resizeTimer);
+  resizeTimer=setTimeout(()=>{renderChart();renderForecastChart();},100);
+});
+
+/* Initialize */
+function init(){
+  populateLanguages();
+  const savedLang=localStorage.getItem("ARKA-language")||"en";
+  const savedLocation=localStorage.getItem("ARKA-location");
+  if(savedLocation){
+    currentLocation.name=savedLocation;
+    $("settingsLocation").value=savedLocation;
+    $("workLocation").value=savedLocation;
+    $("hospitalLocation").value=savedLocation;
+  }
+  $("workDate").value=new Date().toISOString().slice(0,10);
+  $("dateText").textContent=new Date().toLocaleDateString(undefined,{weekday:"long",month:"short",day:"numeric",year:"numeric"});
+  $("topLocation").textContent=currentLocation.name;
+  updateWater();
+  makeDemoData();
+  applyLanguage(savedLang);
+  renderSupervisor();
+}
+init();
+</script>
+</body>
+</html>
